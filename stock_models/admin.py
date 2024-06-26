@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Bitlink
+from .models import Bitlink, Client, Box, Order
 from vk_utils import shorten_link_vkontakte, get_clicks_vkontakte
 
 
@@ -37,3 +37,21 @@ class BitlinkAdmin(admin.ModelAdmin):
         self.message_user(request, "Переходы обновлены", level='success')
 
     update_clicks.short_description = "Обновить переходы по выбранным битлинкам"
+
+
+@admin.register(Client)
+class ClientAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'email')
+    list_filter = ('name',)
+
+
+@admin.register(Box)
+class BoxAdmin(admin.ModelAdmin):
+    list_display = ('id', 'client', 'start_storage', 'end_storage')
+    list_filter = ('client',)
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'client', 'box', 'address', 'phone')
+    list_filter = ('client',)
