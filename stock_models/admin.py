@@ -48,10 +48,10 @@ class ClientAdmin(admin.ModelAdmin):
 @admin.register(Box)
 class BoxAdmin(admin.ModelAdmin):
     list_display = ('id', 'client', 'start_storage', 'end_storage')
-    list_filter = ('client',)
+    list_filter = ('client', 'start_storage', 'end_storage')
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'client', 'box', 'address', 'phone')
-    list_filter = ('client',)
+    list_filter = ('client', 'date', 'box', 'state')
