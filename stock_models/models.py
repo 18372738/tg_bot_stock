@@ -1,5 +1,9 @@
 from django.db import models
 
+BOX_CHOICES = (
+    ('in_storage', 'на хранении'),
+    ('removed', 'снят с хранения'),
+)
 
 ORDER_CHOICES = (
     ('adopted', 'принят'),
@@ -29,12 +33,13 @@ class Client(models.Model):
 
 
 class Box(models.Model):
-    start_storage = models.DateTimeField('начало хранения')
-    end_storage = models.DateTimeField('конец хранения')
+    start_storage = models.DateField('начало хранения')
+    end_storage = models.DateField('конец хранения')
     client = models.ForeignKey(Client,
                                verbose_name='клиент',
                                on_delete=models.CASCADE,
                                related_name='boxes')
+    status = models.CharField('статус', choices=BOX_CHOICES, max_length=10, default='in_storage')
 
     def __str__(self):
         return f'бокс {self.id}'
@@ -49,10 +54,10 @@ class Order(models.Model):
                                verbose_name='клиент',
                                on_delete=models.CASCADE,
                                related_name='orders')
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
     address = models.TextField('адрес', null=True, blank=True)
     phone = models.IntegerField('телефон', unique=True)
-    box = models.OneToOneField(Box, on_delete=models.CASCADE)
+    box = models.OneToOneField(Box, on_delete=models.CASCADE, null=True, blank=True)
     size = models.PositiveIntegerField('кв.м', null=True, blank=True)
     price = models.PositiveIntegerField('цена', null=True, blank=True)
     state = models.CharField('состояние', choices=ORDER_CHOICES, max_length=9, default='adopted')
