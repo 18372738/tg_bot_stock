@@ -28,6 +28,7 @@ class Client(models.Model):
     name = models.CharField('ФИО', max_length=200)
     email = models.EmailField('email', unique=True)
     phone = models.IntegerField('телефон', unique=True)
+    telegram_id = models.CharField('телеграмм ID', max_length=50)
 
     def __str__(self):
         return self.name

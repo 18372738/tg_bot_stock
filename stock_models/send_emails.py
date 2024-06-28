@@ -18,4 +18,4 @@ def reminder():
             [box.client.email]
         )
         msg.send()
-        print(f'сообщение отпрfвлено на {box.client.email}')
+        print(f'сообщение отправлено на {box.client.email}')
