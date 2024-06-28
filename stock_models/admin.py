@@ -41,7 +41,7 @@ class BitlinkAdmin(admin.ModelAdmin):
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email')
+    list_display = ('id', 'name', 'email', 'phone')
     list_filter = ('name',)
 
 
@@ -53,5 +53,5 @@ class BoxAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'client', 'box', 'address', 'phone')
+    list_display = ('id', 'client', 'box', 'address')
     list_filter = ('client', 'date', 'box', 'state',)

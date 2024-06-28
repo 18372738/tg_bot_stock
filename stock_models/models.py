@@ -1,13 +1,17 @@
 from django.db import models
 
 BOX_CHOICES = (
+    ('reserved', 'зарезервирован'),
     ('in_storage', 'на хранении'),
     ('removed', 'снят с хранения'),
+    ('expired', 'просрочен'),
 )
 
 ORDER_CHOICES = (
-    ('adopted', 'принят'),
-    ('fulfilled', 'исполнен'),
+    ('todo', 'принять в работу'),
+    ('true', 'подтвержден'),
+    ('topay', 'выставить счет'),
+    ('false', 'отменен'),
 )
 
 
@@ -23,6 +27,7 @@ class Bitlink(models.Model):
 class Client(models.Model):
     name = models.CharField('ФИО', max_length=200)
     email = models.EmailField('email', unique=True)
+    phone = models.IntegerField('телефон', unique=True)
 
     def __str__(self):
         return self.name
@@ -39,7 +44,8 @@ class Box(models.Model):
                                verbose_name='клиент',
                                on_delete=models.CASCADE,
                                related_name='boxes')
-    status = models.CharField('статус', choices=BOX_CHOICES, max_length=10, default='in_storage')
+    size = models.PositiveIntegerField('кв.м', null=True, blank=True)
+    status = models.CharField('статус', choices=BOX_CHOICES, max_length=10, default='reserved')
 
     def __str__(self):
         return f'бокс {self.id}'
@@ -55,12 +61,10 @@ class Order(models.Model):
                                on_delete=models.CASCADE,
                                related_name='orders')
     date = models.DateField(auto_now_add=True)
-    address = models.TextField('адрес', null=True, blank=True)
-    phone = models.IntegerField('телефон', unique=True)
+    address = models.TextField('адрес')
     box = models.OneToOneField(Box, on_delete=models.CASCADE, null=True, blank=True)
-    size = models.PositiveIntegerField('кв.м', null=True, blank=True)
     price = models.PositiveIntegerField('цена', null=True, blank=True)
-    state = models.CharField('состояние', choices=ORDER_CHOICES, max_length=9, default='adopted')
+    state = models.CharField('состояние', choices=ORDER_CHOICES, max_length=9, default='todo')
 
 
     def __str__(self):
