@@ -101,15 +101,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = EMAIL_HOST
 EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
-EMAIL_PORT = '465'
-EMAIL_USE_SSL = True
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_EMAIL = EMAIL_HOST_USER
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_SERVER = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
 
 Q_CLUSTER = {
     "name": "stock",
-    "orm": "default",  # Use Django's ORM + database for broker
+    "orm": "default",
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
