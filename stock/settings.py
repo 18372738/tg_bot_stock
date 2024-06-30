@@ -108,8 +108,12 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
 
 Q_CLUSTER = {
-    "name": "stock",
-    "orm": "default",
+    'name': 'stock',
+    'workers': 1,
+    'recycle': 500,  # по умолчанию 500
+    'timeout': 500,  # по умолчанию None
+    'retry': 1000,   # timeout должен быть меньше чем retry
+    'orm': 'default',
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
