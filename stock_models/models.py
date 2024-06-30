@@ -39,8 +39,8 @@ class Client(models.Model):
 
 
 class Box(models.Model):
-    start_storage = models.DateField('начало хранения')
-    end_storage = models.DateField('конец хранения')
+    start_storage = models.DateTimeField('начало хранения')
+    end_storage = models.DateTimeField('конец хранения')
     client = models.ForeignKey(Client,
                                verbose_name='клиент',
                                on_delete=models.CASCADE,
