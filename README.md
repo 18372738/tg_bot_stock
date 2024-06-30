@@ -81,19 +81,19 @@ python manage.py qcluster
 ```
 При желании можно запускать отправку напоминаний один раз в день из оболочки ```shell```
 Для этого в командной строке введите
-```commandline
+```bush
 python manage.py shell
 ```
 В открывшейся интерактивной оболочке ```shell``` сделайте необходимые импорты
 
 ```commandline
 import smtplib
+import datetime
 from django.core.mail import send_mail
 from django.conf import settings
-from datetime import datetime
 from datetime import timedelta
 from stock_models.models import Bitlink, Client, Box, Order
-from stock_models.send_email import reminder
+from stock_models.send_emails import reminder
 ```
 Запустите функцию для отправки напоминаний
 ```commandline

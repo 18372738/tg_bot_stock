@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Bitlink, Client, Box, Order
-from vk_utils import shorten_link_vkontakte, get_clicks_vkontakte
+from vk_bitlink import shorten_link_vkontakte, get_clicks_vkontakte
 
 
 
