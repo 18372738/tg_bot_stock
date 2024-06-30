@@ -67,7 +67,6 @@ class Order(models.Model):
     price = models.PositiveIntegerField('цена', null=True, blank=True)
     state = models.CharField('состояние', choices=ORDER_CHOICES, max_length=9, default='todo')
 
-
     def __str__(self):
         return f'заказ {self.id}'
 

@@ -9,6 +9,7 @@ from django.conf import settings
 from datetime import timedelta
 from stock_models.models import Box
 
+
 def reminder():
     time_now = datetime.date.today()
     three_days_before_end = time_now + timedelta(days=3)
