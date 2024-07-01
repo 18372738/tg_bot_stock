@@ -117,7 +117,7 @@ reminder()
 - [admin.py](https://github.com/18372738/tg_bot_stock/blob/main/stock_models/admin.py)
 - [models.py](https://github.com/18372738/tg_bot_stock/blob/main/stock_models/models.py)
 - [bot.py](https://github.com/18372738/tg_bot_stock/blob/main/bot.py)
--[send_emails.py](https://github.com/18372738/tg_bot_stock/blob/main/stock_models/send_emails.py)
+- [send_emails.py](https://github.com/18372738/tg_bot_stock/blob/main/stock_models/send_emails.py)
 ### Цели проекта
 Проект написан в образовательных целях.
 
