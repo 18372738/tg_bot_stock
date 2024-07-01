@@ -3,7 +3,6 @@ import sys
 import telegram
 import django
 from dotenv import load_dotenv
-from django.utils import timezone
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, CallbackQuery
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext, MessageHandler, Filters
 
@@ -97,14 +96,16 @@ def show_remaining_term(query) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     client_id = query.from_user.id
     client = Client.objects.filter(telegram_id=client_id).first()
-    box = Box.objects.filter(client=client).first()
-    now = timezone.now()
-    if not box:
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.reply_text('У вас нет вещей на складе в хранении.', reply_markup=reply_markup)
-    else:
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.reply_text(f'Ваши вещи хранятся до {box.end_storage}', reply_markup=reply_markup)
+    boxes_storage = Box.objects.filter(client=client)
+    for box in boxes_storage:
+        if not box:
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            query.message.reply_text('У вас нет вещей на складе в хранении.', reply_markup=reply_markup)
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    message = "Ваши вещи хранятся до следующих дат:\n"
+    for box in boxes_storage:
+        message += f"- Коробка {box.id}: до {box.end_storage}\n"
+    query.message.reply_text(message, reply_markup=reply_markup)
 
 
 def show_get_things(query) -> None:
@@ -115,14 +116,16 @@ def show_get_things(query) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     client_id = query.from_user.id
     client = Client.objects.filter(telegram_id=client_id).first()
-    box = Box.objects.filter(client=client).first()
-    if not box:
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.reply_text('У вас нет вещей на складе в хранении.', reply_markup=reply_markup)
-    else:
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.reply_text(f'Ваши вещи хранятся в ячейке {box.id} с {box.start_storage} по {box.end_storage}, забрать можно по адресу Ленинский проспект 100 с 9:00 по 18:00', reply_markup=reply_markup)
-
+    boxes_storage = Box.objects.filter(client=client)
+    for box in boxes_storage:
+        if not box:
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            query.message.reply_text('У вас нет вещей на складе в хранении.', reply_markup=reply_markup)
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    message = "Вещи в хранение:\n"
+    for box in boxes_storage:
+        message += f"-Ячейка {box.id} с {box.start_storage} по {box.end_storage}, статус хранения {box.status}, забрать можно по адресу Ленинский проспект 100 с 9:00 по 18:00'\n"
+    query.message.reply_text(message, reply_markup=reply_markup)
 
 def show_handler(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
