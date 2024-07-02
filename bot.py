@@ -127,6 +127,7 @@ def show_get_things(query) -> None:
         message += f"-Ячейка {box.id} с {box.start_storage} по {box.end_storage}, статус хранения {box.status}, забрать можно по адресу Ленинский проспект 100 с 9:00 по 18:00'\n"
     query.message.reply_text(message, reply_markup=reply_markup)
 
+
 def show_handler(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     query.answer()
@@ -297,8 +298,7 @@ def update_data_collection(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     if query.data == 'consent':
         new_order(update, context)
-
-
+        
 
 if __name__ == '__main__':
     load_dotenv()
