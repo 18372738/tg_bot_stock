@@ -5,6 +5,7 @@ import django
 from dotenv import load_dotenv
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, CallbackQuery
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext, MessageHandler, Filters
+from django.db.models import Q
 
 load_dotenv()
 
@@ -96,13 +97,13 @@ def show_remaining_term(query) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     client_id = query.from_user.id
     client = Client.objects.filter(telegram_id=client_id).first()
-    boxes_storage = Box.objects.filter(client=client)
+    boxes_storage = Box.objects.filter(Q(client=client) | Q(status=("expired","in_storage")))
     if not boxes_storage:
         message = "У вас нет вещей на складе в хранении."
     else:
         message = "Ваши вещи хранятся до следующих дат:\n"
         for box in boxes_storage:
-            message += f"- Коробка {box.id}: до {box.end_storage}\n"
+            message += f"- Бокс №{box.id}. Дата окончания хранения - {box.end_storage}. Статус хранения - {box.status}\n"
     query.message.reply_text(message, reply_markup=reply_markup)
 
 
@@ -114,14 +115,15 @@ def show_get_things(query) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     client_id = query.from_user.id
     client = Client.objects.filter(telegram_id=client_id).first()
-    boxes_storage = Box.objects.filter(client=client)
+    boxes_storage = Box.objects.filter(Q(client=client) | Q(status=("expired","in_storage")))
     if not boxes_storage:
         message = "У вас нет вещей на складе в хранении."
     else:
         message = "Вещи в хранение:\n"
         for box in boxes_storage:
-            message += f"-Ячейка {box.id} с {box.start_storage} по {box.end_storage}, статус хранения {box.status}, забрать можно по адресу Ленинский проспект 100 с 9:00 по 18:00'\n"
-    query.message.reply_text(message, reply_markup=reply_markup)
+            message += f"-Бокс №{box.id}. Дата хранения - с {box.start_storage} по {box.end_storage}. Статус хранения - {box.status}.\n"
+    query.message.reply_text(message)
+    query.message.reply_text("Забрать можно по адресу Ленинский проспект 100 с 9:00 по 18:00", reply_markup=reply_markup)
 
 
 def show_handler(update: Update, context: CallbackContext) -> None:
