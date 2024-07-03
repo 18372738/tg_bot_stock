@@ -97,14 +97,12 @@ def show_remaining_term(query) -> None:
     client_id = query.from_user.id
     client = Client.objects.filter(telegram_id=client_id).first()
     boxes_storage = Box.objects.filter(client=client)
-    for box in boxes_storage:
-        if not box:
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            query.message.reply_text('У вас нет вещей на складе в хранении.', reply_markup=reply_markup)
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    message = "Ваши вещи хранятся до следующих дат:\n"
-    for box in boxes_storage:
-        message += f"- Коробка {box.id}: до {box.end_storage}\n"
+    if not boxes_storage:
+        message = "У вас нет вещей на складе в хранении."
+    else:
+        message = "Ваши вещи хранятся до следующих дат:\n"
+        for box in boxes_storage:
+            message += f"- Коробка {box.id}: до {box.end_storage}\n"
     query.message.reply_text(message, reply_markup=reply_markup)
 
 
@@ -117,14 +115,12 @@ def show_get_things(query) -> None:
     client_id = query.from_user.id
     client = Client.objects.filter(telegram_id=client_id).first()
     boxes_storage = Box.objects.filter(client=client)
-    for box in boxes_storage:
-        if not box:
-            reply_markup = InlineKeyboardMarkup(keyboard)
-            query.message.reply_text('У вас нет вещей на складе в хранении.', reply_markup=reply_markup)
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    message = "Вещи в хранение:\n"
-    for box in boxes_storage:
-        message += f"-Ячейка {box.id} с {box.start_storage} по {box.end_storage}, статус хранения {box.status}, забрать можно по адресу Ленинский проспект 100 с 9:00 по 18:00'\n"
+    if not boxes_storage:
+        message = "У вас нет вещей на складе в хранении."
+    else:
+        message = "Вещи в хранение:\n"
+        for box in boxes_storage:
+            message += f"-Ячейка {box.id} с {box.start_storage} по {box.end_storage}, статус хранения {box.status}, забрать можно по адресу Ленинский проспект 100 с 9:00 по 18:00'\n"
     query.message.reply_text(message, reply_markup=reply_markup)
 
 
@@ -176,7 +172,7 @@ def order_free_export(query) -> None:
         [InlineKeyboardButton("Главное меню", callback_data='main_menu')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    query.message.reply_text('Стоимость хранения зависит от размера, если вы не знаете размер, наш курьер измерит на месте. Выбирите пункт:', reply_markup=reply_markup)
+    query.message.reply_text("Стоимость хранения зависит от размера, если вы не знаете размер, наш курьер измерит на месте. Выбирите пункт:", reply_markup=reply_markup)
 
 
 def select_bring_myself(query) -> None:
@@ -298,7 +294,7 @@ def update_data_collection(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     if query.data == 'consent':
         new_order(update, context)
-        
+
 
 if __name__ == '__main__':
     load_dotenv()
